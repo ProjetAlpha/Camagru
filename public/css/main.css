@@ -1,0 +1,202 @@
+.card{
+  border-radius: 9px !important;
+}
+
+.mr-r{
+  margin-right:3% !important;
+}
+
+.mr-l{
+  margin-left:3% !important;
+}
+
+.mr-l-1{
+  margin-left:1% !important;
+}
+
+.mr-t{
+  margin-top:3% !important;
+}
+
+@media (max-width: 1024px) {
+html { font-size: 0.9em!important; }
+}
+
+@media (max-width: 980px) {
+html { font-size: 0.8em!important; }
+}
+
+@media (max-width: 600px) {
+  html { font-size: 0.7em!important;}
+}
+
+@media screen and (max-width: 600px) {
+  .button.is-small-mobile {
+    font-size: .7rem
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .button.is-small-mobile {
+    font-size: .8rem
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .button.is-small-mobile {
+    font-size: .4rem
+  }
+}
+
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    width: 100%;
+}
+
+@media screen and (max-width: 980px) {
+  .a.is-small-mobile {
+    font-size: .8rem
+  }
+  .li.is-small-mobile{
+    font-size: .8rem
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .a.is-small-mobile {
+    font-size: .7rem
+  }
+  .li.is-small-mobile{
+    font-size: .7rem
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+    textarea{
+        min-height: 7%!important;
+        max-height: 13%!important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .modal-card{
+        width: 80%!important;
+        height: 90%!important;
+    }
+}
+
+body.is-active {
+    overflow: hidden!important;
+    position: fixed;
+}
+
+@media screen and (max-width: 1024px) {
+    .modal-card{
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    textarea{
+        min-height: 4%!important;
+        max-height: 11%!important;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    textarea{
+        min-height: 3%!important;
+        max-height: 7%!important;
+    }
+}
+
+
+
+@media screen and (max-width: 600px) {
+  .is-mobile-card {
+    padding:.8rem!important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .is-mobile-card {
+    padding:.1rem!important;
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+  .title.is-3 {
+    font-size: 1.9rem;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .title.is-3 {
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .title.is-3 {
+    font-size: 1.6rem;
+  }
+}
+
+.button.is-danger{
+    background-color: #E85242;
+}
+
+.button.is-danger:hover{
+    background-color: #f96959;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.reponsive-text-1{
+    font-size:1.2vw;
+}
+
+.mr-b-1{
+  margin-bottom:1% !important;
+}
+
+.mr-b-5{
+  margin-bottom:5% !important;
+}
+
+.mr-b-6{
+  margin-bottom:5% !important;
+}
+
+.mr-b-7{
+  margin-bottom:10% !important;
+}
+
+.mr-b-9{
+  margin-bottom:10% !important;
+}
+
+.mr-b{
+  margin-bottom:3% !important;
+}
+
+.under-black{
+  text-decoration: underline black;
+}
+
+.footer{
+  height: 10%;
+}
+.logo{
+  letter-spacing: 2px;
+  font-size: 20px;
+  font-weight: bold;
+}
