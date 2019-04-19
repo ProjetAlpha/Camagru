@@ -3,6 +3,7 @@
 !defined('ALPHA_NUM') && define('ALPHA_NUM', '/^[\w-]+$/');
 !defined('ALPHA') && define('ALPHA', '/^[a-zA-Z]*$/');
 !defined('DIGITS') && define('DIGITS', '/^\d+$/');
+!defined('PAGE') && define('PAGE', '/(\d)+(#[A-Za-z_-]+)?/');
 !defined('ROOT') && define('ROOT', __DIR__);
 !defined('IS_RESET') && define('IS_RESET', 2);
 !defined('IS_NOT_RESET') && define('IS_NOT_RESET', 1);

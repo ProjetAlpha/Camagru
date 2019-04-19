@@ -193,3 +193,23 @@ if (!function_exists('calc_pagination'))
         return ($pagination);
     }
 }
+
+if (!function_exists('createClassArray'))
+{
+    function createClassArray($path)
+    {
+        $arrayClass = [];
+        foreach (new DirectoryIterator(__DIR__.'/'.$path) as $file) {
+            if ($file->isFile()) {
+                $fullName = $file->getFilename();
+                $name = strtolower(str_replace(['.php', ucfirst($path)], '', $fullName));
+                $className = str_replace('.php', '', $fullName);
+                if (!array_key_exists($name, $arrayClass)){
+                    require_once($file->getRealPath());
+                    $arrayClass[$name] = new $className();
+                }
+            }
+        }
+        return ($arrayClass);
+    }
+}

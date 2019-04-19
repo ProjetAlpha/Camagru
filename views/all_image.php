@@ -12,25 +12,38 @@
             <?php foreach ($images as $img): ?>
                 <div class="columns is-centered is-mobile">
                     <div class="column is-half-desktop is-two-quarter-fullhd is-half-tablet is-two-quarter-mobile has-text-centered">
-                        <div class="card">
+                        <div class="card" style="border-radius:0!important">
                             <div class="card-image">
                                 <figure class="image">
                                     <img src="<?php echo htmlspecialchars($img->img_path); ?>"
                                     id="<?php echo htmlspecialchars($img->id); ?>" alt="user-image"/>
                                 </figure>
                             </div>
-                            <div class="columns is-centered is-multiline is-mobile mr-b">
-                                <div class="column has-text-centered">
-                                    <a class="card-footer-item" id="<?php echo htmlspecialchars($img->id); ?>"
-                                        onclick="getComments(this)">
-                                        Afficher les commentaires
-                                    </a>
+                            <div class="columns is-centered is-multiline is-mobile mr-b mr-t">
+                                <div class="columns is-mobile">
+                                    <div class="column is-half">
+                                        <a class="card-footer-item mr-t" id="<?php echo htmlspecialchars($img->id); ?>"
+                                            onclick="getComments(this)" style="width:100%;">
+                                            <i class="fas fa-comments icon-responsive">
+                                            <?php if (($commentaryNumber = htmlspecialchars($util->getCommentaryNumber($img->id))) > 0): ?>
+                                                (<?php echo htmlspecialchars($commentaryNumber); ?>)
+                                            <?php else: ?>
+                                                <?php echo 0; ?>
+                                            <?php endif; ?>
+                                            </i>
+                                        </a>
+                                    </div>
+                                    <div class="column is-half">
+                                        <a class="card-footer-item" id="<?php echo htmlspecialchars($img->id); ?>"
+                                            style="width:100%">
+                                            <i class="fas fa-thumbs-up icon-responsive"></i>
+                                        </a>
+                                    </div>
                                     <div class="modal">
                                         <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Modal title</p>
-                                                <button class="delete" aria-label="close" onclick="hideModal(this)"></button>
+                                        <div class="modal-card" id="modal-body">
+                                            <header class="modal-card-head" style="background:none;padding:3%">
+                                                <p class="modal-card-title"></p>
                                             </header>
                                             <section class="modal-card-body">
                                                 <!-- Content ... -->
@@ -40,11 +53,10 @@
                                             <button class="button" onclick="hideModal(this)">Cancel</button>
                                         </footer> -->
                                     </div>
+                                    <button class="modal-close is-large" style="right:2%;top:6%"
+                                    aria-label="close" onclick="hideModal(this)"></button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column" id="add-comments-<?php echo htmlspecialchars($img->id); ?>">
-
                         </div>
                     </div>
 
@@ -76,6 +88,9 @@
 </section>
 
 <script>
+
+const currentUser = '<?php echo json_encode(htmlspecialchars($_SESSION['name'])); ?>';
+const islooged = <?php echo json_encode(htmlspecialchars(isAuth())); ?>;
 
 function createTextarea(dst, link)
 {
@@ -111,8 +126,8 @@ function createTextarea(dst, link)
 
 function createImg(link)
 {
-    var parent = link.parentElement.children[1].children[1].children[1];
-    var srcImg = link.parentElement.parentElement.parentElement.children[0].children[0].children[0];
+    var parent = link.parentElement.parentElement.children[2].children[1].children[1];
+    var srcImg = link.parentElement.parentElement.parentElement.parentElement.children[0].children[0].children[0];
     var container = document.createElement('div'),
     cardImg =  document.createElement('div'),
     figure = document.createElement('figure'),
@@ -121,7 +136,7 @@ function createImg(link)
     cardImg.className = 'card-image';
     figure.className = 'image mr-b';
     img.src = srcImg.src;
-    img.style.borderRadius = '2%';
+    img.style.borderRadius = '6%';
     img.style.width = '100%';
     img.style.height = 'auto';
     container.className = 'columns is-centered is-mobile';
@@ -155,9 +170,8 @@ function createComment(txt, dst, before = null)
     articleCard.appendChild(cardContent);
     cardCol.appendChild(articleCard);
     dst.style.background = '#E7ECEF';
-    //(newItem, list.childNodes[0]);
     if (before !== null)
-    dst.insertBefore(cardCol, before);
+        dst.insertBefore(cardCol, before);
     else {
         dst.appendChild(cardCol);
     }
@@ -166,8 +180,7 @@ function createComment(txt, dst, before = null)
 
 function getAllComments(comments, link)
 {
-    var parent = link.parentElement.children[1].children[1].children[1];
-    console.log(parent);
+    var parent = link.parentElement.parentElement.children[2].children[1].children[1];
     for(i = 0; i < comments.length; i++)
     {
         createComment(comments[i], parent);
@@ -187,16 +200,18 @@ var current_node = {};
 
 function hideModal(node)
 {
-    let parent = node.parentElement.parentElement.parentElement;
+    let parent = node.parentElement;
     parent.classList.remove('is-active');
     var modalBody = parent.children[1].children[1];
     while (modalBody.firstChild) {
         modalBody.removeChild(modalBody.firstChild);
     }
+    document.getElementsByTagName("html")[0].style.overflowY = 'auto';
 }
 
 document.onkeydown = function(evt) {
     evt = evt || window.event;
+    // clic en dehors de la window.
     var isEscape = false;
     if ("key" in evt) {
         isEscape = (evt.key === "Escape" || evt.key === "Esc");
@@ -208,6 +223,8 @@ document.onkeydown = function(evt) {
     }
 };
 
+console.log(islooged);
+
 function getComments(link)
 {
     var xhr = new XMLHttpRequest();
@@ -218,37 +235,61 @@ function getComments(link)
         if (xhr.readyState == 4 && xhr.status == 200) {
             if (IsJsonString(xhr.responseText))
             var data = JSON.parse(xhr.responseText);
+            console.log(xhr.responseText);
             if (Array.isArray(data) && data.length > 0)
             {
-                /*
-                    overflow-x: hidden;
-                    overflow-y: scroll !important;
-                 */
-
-                document.getElementsByTagName("html")[0].style.overflowX = 'hidden';
-
-                document.getElementsByTagName("html")[0].style.overflowY = 'scroll !important';
-                var parent = link.parentElement.children[1];
+                document.getElementsByTagName("html")[0].style.overflowY = 'hidden';
+                var parent = link.parentElement.parentElement.children[2];
                 parent.classList.add('is-active');
                 current_node = parent;
                 createImg(link);
                 getAllComments(data, link);
-                var dstBody = link.parentElement.children[1].children[1].children[1];
-                createTextarea(dstBody, link);
+                var dstBody = link.parentElement.parentElement.children[2].children[1].children[1];
+                if (parseInt(islooged) !== 0)
+                {
+                    createTextarea(dstBody, link);
+                }
             }else {
                 var parent = link.parentElement.children[1];
+                console.log(link.parentElement);
                 parent.classList.add('is-active');
                 current_node = parent;
                 createImg(link);
-                var dstBody = link.parentElement.children[1].children[1].children[1];
-                createTextarea(dstBody, link);
+                var dstBody = link.parentElement.parentElement.children[2].children[1].children[1];
+                if (parseInt(islooged) !== 0)
+                {
+                    createTextarea(dstBody, link);
+                }
             }
         }
     }
 }
 
+var regex = /(\d)+(#[A-Za-z-0-9_-]+)?/;
+var matchGoTo = window.location.href.split('/').pop().match(regex);
+if (Array.isArray(matchGoTo) && matchGoTo.length > 0)
+{
+    if (matchGoTo[0].includes('#'))
+    {
+        var id = matchGoTo[0].split('#').pop();
+        var btns = document.getElementsByClassName("card-footer-item");
+        var modal = document.getElementById('modal-body');
+        for (i = 0; i < btns.length; i++)
+        {
+            if (btns[i].getAttribute('id') == id)
+            {
+                btns[i].click();
+                modal.scrollTop = modal.scrollHeight;
+            }
+        }
+    }
+}
+
+
 function addCommentary(btn)
 {
+    if (islooged == 0)
+        return ;
     var xhr = new XMLHttpRequest();
     var currentIndex = Array.prototype.indexOf.call(btn.parentNode.children, btn);
     var textarea = btn.parentNode.children[currentIndex - 1].children[0].children[0].children[0];
@@ -258,12 +299,15 @@ function addCommentary(btn)
 
     xhr.open('POST', '/comments/add/'+imgId);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send('comment='+text);
-
+    var path = window.location.pathname;
+    if (path == '/')
+        xhr.send('comment='+text+'&page=1');
+    else
+        xhr.send('comment='+text+'&page='+path.split('/').pop()+'&user=');
     createComment(text, btn.parentElement, btn.parentNode.children[currentIndex - 1]);
-
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
             if (IsJsonString(xhr.responseText))
             var data = JSON.parse(xhr.responseText);
             if (Array.isArray(data) && data.length > 0)

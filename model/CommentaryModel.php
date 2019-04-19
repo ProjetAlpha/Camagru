@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__DIR__)."/model/CommentaryModel.php");
+
 class CommentaryModel
 {
     private $db;
@@ -19,6 +21,24 @@ class CommentaryModel
         $prepare->execute([$imageId]);
         $result = $prepare->fetchAll(PDO::FETCH_COLUMN);
         return ($result);
+    }
+
+    public function getUserImgName($imageId)
+    {
+        $sql = "SELECT user_email FROM Commentary WHERE img_id=?";
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute([$imageId]);
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+        return ($result['user_email']);
+    }
+
+    public function getCommentaryNumber($imageId)
+    {
+        $sql = "SELECT img_id FROM Commentary WHERE img_id=?";
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute([$imageId]);
+        $result = $prepare->fetchAll(PDO::FETCH_COLUMN);
+        return (count($result));
     }
 
     public function storeCommentary($imageId, $email, $comment)

@@ -7,9 +7,9 @@ class Image extends ImageModel
     public function profil($param = null)
     {
         if (isAuth())
-            view('profil.php');
+        view('profil.php');
         else
-            redirect('/');
+        redirect('/');
     }
 
     public function getAllImg($pageNumber = null)
@@ -21,13 +21,13 @@ class Image extends ImageModel
         if (isset($pageNumber) && !empty($pageNumber)){
             $countImg = $this->countAllimg();
             if ($pageNumber == 1)
-                $images = $this->getAllUsersImg(1, 5);
+            $images = $this->getAllUsersImg(1, 5);
             else {
                 $images = $this->getAllUsersImg((($pageNumber * 5) - 5) + 1, 5);
             }
             $pagination = calc_pagination($countImg);
             if (isset($images) && isset($images[0]))
-                view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => $pageNumber));
+            view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => $pageNumber, 'util' => $this));
             else {
                 view('all_image.php');
             }
@@ -36,7 +36,7 @@ class Image extends ImageModel
             $countImg = $this->countAllimg();
             $pagination = calc_pagination($countImg);
             if (isset($images) && isset($images[0]))
-                view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => '1'));
+            view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => '1', 'util' => $this));
             else {
                 view('all_image.php');
             }
@@ -52,18 +52,24 @@ class Image extends ImageModel
         }
     }
 
+
+
     public function deleteImg($param = null)
     {
-        // verifier que c'est un path valide : se trouve bien dans ressources/user.
         if (isset($_POST['delete']) && isset($_POST['path']) && isAuth())
         {
             $data = json_decode(json_encode($_POST), true);
             $path = str_replace('\\', '', $data['path']);
-            $this->deleteUserImg($_SESSION['name'], $path);
-            $realpath = dirname(__DIR__).'/public'.$path;
-            if (file_exists($realpath))
+            $splitPath = explode('/', $path);
+            if ($splitPath[1] == "ressources" && $splitPath[2] == "images" && $splitPath[3] == $_SESSION['name'])
             {
-                unlink($realpath);
+
+                $this->deleteUserImg($_SESSION['name'], $path);
+                $realpath = dirname(__DIR__).'/public'.$path;
+                if (file_exists($realpath))
+                {
+                    unlink($realpath);
+                }
             }
         }
     }

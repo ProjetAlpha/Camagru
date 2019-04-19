@@ -30,11 +30,17 @@ function async_request(xhr, method, url, data, type) {
     xhr.send(data);
     var container = document.getElementById('user-img');
     var data = [];
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+    }
+}
     if (type !== 'delete')
     {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-
+                console.log(xhr.responseText);
                 if (IsJsonString(xhr.responseText))
                     var data = JSON.parse(xhr.responseText);
                 if (Array.isArray(data) && data.length > 1)

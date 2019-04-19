@@ -38,6 +38,15 @@ class ImageModel{
         return ($result['countImg']);
     }
 
+    public function getCommentaryNumber($imageId)
+    {
+        $sql = "SELECT img_id FROM Commentary WHERE img_id=?";
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute([$imageId]);
+        $result = $prepare->fetchAll(PDO::FETCH_COLUMN);
+        return (count($result));
+    }
+
     public function getUserImg($name)
     {
         $sql = "SELECT img_path FROM Gallery WHERE user_name=?";

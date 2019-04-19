@@ -6,7 +6,7 @@ class Route
     private $routeCounter = 0;
     private $idUrlPos = 0;
     private $root;
-    private $validRegex = [":alphanum" => ALPHA_NUM, ":alpha" => ALPHA, ":digits" => DIGITS];
+    private $validRegex = [":alphanum" => ALPHA_NUM, ":alpha" => ALPHA, ":digits" => DIGITS, ":page" => PAGE];
 
     public function __construct()
     {
