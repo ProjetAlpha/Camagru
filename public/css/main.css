@@ -34,17 +34,33 @@
   }
 }
 
-@media (max-width: 768px) {
+
+@media screen and (max-width: 768px) {
   .icon-responsive{
       font-size:2.5vw;
   }
 }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
   .icon-responsive{
       font-size:3vw;
   }
+  .txt-responsive{
+      font-size: 2.7vw;
+  }
 }
+
+.button{
+
+}
+
+@media screen and (max-width: 420px)
+{
+    .txt-reponsive{
+        font-size: 3vw!important;
+    }
+}
+
 
 @media (max-width: 1024px) {
 html { font-size: 0.9em!important; }
@@ -66,7 +82,7 @@ html { font-size: 0.8em!important; }
 
 @media screen and (max-width: 980px) {
   .button.is-small-mobile {
-    font-size: .8rem
+    font-size: .9rem
   }
 }
 
@@ -106,7 +122,7 @@ textarea {
 @media screen and (max-width: 1024px) {
     textarea{
         min-height: 7%!important;
-        max-height: 13%!important;
+        max-height: 12%!important;
     }
 }
 
@@ -126,14 +142,14 @@ textarea {
 
 @media screen and (max-width: 600px) {
     textarea{
-        min-height: 4%!important;
+        min-height: 7%!important;
         max-height: 11%!important;
     }
 }
 
 @media screen and (max-width: 420px) {
     textarea{
-        min-height: 3%!important;
+        min-height: 5%!important;
         max-height: 7%!important;
     }
 }

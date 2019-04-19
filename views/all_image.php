@@ -136,7 +136,7 @@ function createImg(link)
     cardImg.className = 'card-image';
     figure.className = 'image mr-b';
     img.src = srcImg.src;
-    img.style.borderRadius = '6%';
+    img.style.padding = '1%';
     img.style.width = '100%';
     img.style.height = 'auto';
     container.className = 'columns is-centered is-mobile';
@@ -162,7 +162,7 @@ function createComment(txt, dst, before = null)
     articleCard.style.width = '80%';
     articleCard.style.margin = '2%';
     articleCard.style.textAlign = 'left';
-    cardContent.className = 'card-content';
+    cardContent.className = 'card-content txt-responsive';
     cardContentTxt.className = 'content';
     cardContentTxt.innerHTML = txt;
 
@@ -301,9 +301,9 @@ function addCommentary(btn)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     var path = window.location.pathname;
     if (path == '/')
-        xhr.send('comment='+text+'&page=1');
+        xhr.send('comment='+text+'&page=1'+'&user='+currentUser);
     else
-        xhr.send('comment='+text+'&page='+path.split('/').pop()+'&user=');
+        xhr.send('comment='+text+'&page='+path.split('/').pop()+'&user='+currentUser);
     createComment(text, btn.parentElement, btn.parentNode.children[currentIndex - 1]);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {

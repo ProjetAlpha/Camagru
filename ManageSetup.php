@@ -135,6 +135,7 @@ class Setup
       id INT(11) AUTO_INCREMENT PRIMARY KEY,
       img_id INT(11),
       user_email VARCHAR(256) NOT NULL,
+      user_name VARCHAR(256) NOT NULL,
       comment TEXT,
       reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
