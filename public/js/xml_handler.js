@@ -46,7 +46,7 @@ function async_request(xhr, method, url, data, type) {
                 if (Array.isArray(data) && data.length > 1)
                 {
                     displayImages(data);
-                }else if (data !== "" && data.length != 0){
+                }else if (data !== undefined && data !== "" && data.length != 0){
                     console.log(data);
                     addImg(data);
                 }
@@ -77,20 +77,26 @@ function addImg(img, isAll = false)
     var cardContent = document.createElement('div');
 
     var cardBtn = document.createElement('div');
+    cardBtn.style.padding = '2%';
 
-    var deleteBtn = document.createElement('a');
+    //var deleteBtn = document.createElement('a');
     var icon = document.createElement('span');
     var iconElement = document.createElement('i');
     var text = document.createElement('span');
 
-    iconElement.className = 'fas fa-times';
-    icon.className = 'icon is-small';
+    iconElement.className = 'fas fa-times-circle fa-lg icon-responsive2 icon-reponsive-lg-percent';
+    //iconElement.style.color = '#212529';
+    icon.className = 'tag is-info is-small-mobile';
+    icon.style.float = 'right';
+    icon.style.cursor = 'pointer';
     icon.appendChild(iconElement);
 
-    text.innerHTML = 'Supprimer';
+    //text.innerHTML = 'Supprimer';
     text.className = 'reponsive-text-1';
-    deleteBtn.className = 'button is-danger is-small-mobile';
-    deleteBtn.addEventListener('click', function(event){
+    //deleteBtn.className = 'button is-danger is-small-mobile';
+    //
+    // /ressources/images/tho/opCngxceiOYNNk2AmkgVmN4XKrkxVNtD.png
+    icon.addEventListener('click', function(event){
         var parent = this.parentElement.parentElement;
         var path = parent.children[0].children[0].children[0].src;
         var urlPath = new URL(path).pathname;
@@ -98,14 +104,14 @@ function addImg(img, isAll = false)
         event.preventDefault();
         parent.parentElement.removeChild(parent);
     }, false);
-    deleteBtn.appendChild(text);
-    deleteBtn.appendChild(icon);
+    //deleteBtn.appendChild(text);
+    //deleteBtn.appendChild(icon);
 
     card.className = 'card mr-b';
     cardContent.className = 'card-image';
     card.appendChild(cardContent);
-    cardBtn.className = 'card-content is-mobile-card';
-    cardBtn.appendChild(deleteBtn);
+    cardBtn.className = 'card-content is-overlay is-clipped';
+    cardBtn.appendChild(icon);
     card.appendChild(cardBtn);
 
     mainDiv.className = 'level-item has-text-centered';

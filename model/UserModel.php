@@ -14,13 +14,24 @@ class UserModel
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function userExist($mail)
+    public function userExist($mail, $name = null)
     {
-        $sql = "SELECT email FROM Users WHERE email=?";
+        if ($name !== null)
+            $sql = "SELECT email,name FROM Users WHERE email=? AND name=?";
+        else
+            $sql = "SELECT email,name FROM Users WHERE email=?";
         $prepare = $this->db->prepare($sql);
-        $prepare->execute([$mail]);
-        $result = $prepare->fetch(PDO::FETCH_ASSOC);
-        return (isset($result['email']) && !empty($result['email']));
+        if ($name !== null){
+            $prepare->execute([$mail, $name]);
+            $result = $prepare->fetch(PDO::FETCH_ASSOC);
+            return (isset($result['email']) && isset($result['name'])
+                && !empty($result['email']) && !empty($result['name']));
+        }
+        else {
+            $prepare->execute([$mail]);
+            $result = $prepare->fetch(PDO::FETCH_ASSOC);
+            return (isset($result['email']) && !empty($result['email']));
+        }
     }
 
     public function createUser($name, $password, $mail, $confirmationLink)

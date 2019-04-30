@@ -6,6 +6,10 @@
   margin-right:3% !important;
 }
 
+.mr-l-5{
+    margin-left:10% !important;
+}
+
 .mr-l{
   margin-left:3% !important;
 }
@@ -54,9 +58,16 @@
 
 }
 
+.icon-reponsive-lg-percent{
+    font-size:190%;
+}
+
 @media screen and (max-width: 420px)
 {
     .txt-reponsive{
+        font-size: 3vw!important;
+    }
+    .icon-responsive2{
         font-size: 3vw!important;
     }
 }
@@ -140,11 +151,23 @@ textarea {
     }
 }
 
+.tag:not(body).is-info{
+    background-color: transparent;
+}
+
 @media screen and (max-width: 600px) {
     textarea{
         min-height: 7%!important;
         max-height: 11%!important;
     }
+}
+
+@media screen and (max-width: 500px){
+.tag:not(body){
+    font-size: 10%;
+    padding-left: 10%!important;
+    padding-right: 0!important;
+}
 }
 
 @media screen and (max-width: 420px) {
@@ -217,6 +240,12 @@ img {
   margin-bottom:5% !important;
 }
 
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .mr-b-6{
   margin-bottom:5% !important;
 }
@@ -235,6 +264,15 @@ img {
 
 .under-black{
   text-decoration: underline black;
+}
+
+.delete-btn{
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: none;
+    font-size: 1rem;
+    position: relative;
+    vertical-align: top;
 }
 
 .footer{

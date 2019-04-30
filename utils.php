@@ -26,6 +26,8 @@ if (!function_exists('filterData')) {
         }
     }
 }
+// 100.
+// Lien vers la ressource cible de l'image, Lien vers la ressource source de l'image, coordonnée du point de destination, coordonnée du point de destination
 if (!function_exists('imagecopymerge_alpha'))
 {
     function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
@@ -211,5 +213,13 @@ if (!function_exists('createClassArray'))
             }
         }
         return ($arrayClass);
+    }
+}
+if (!function_exists('extract_base64') ){
+    function extract_base64($base64)
+    {
+        $data = explode(',', $base64);
+        $str = str_replace(' ', '+', trim($data[1]));
+        return (base64_decode($str));
     }
 }

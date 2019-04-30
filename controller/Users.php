@@ -12,7 +12,7 @@ class Users extends UserModel
 
     public function create($param = null)
     {
-        if (isset($_POST['email']) && $this->userExist($_POST['email'])) {
+        if (isset($_POST['email']) && $this->userExist($_POST['email'], $_POST['name'])) {
             view(
                 "register.php",
                 array("warning" => "Ce mail existe déjà.", "type" => "USER_WARNING")
@@ -68,7 +68,7 @@ class Users extends UserModel
 
     public function reset($param = null)
     {
-        if (isset($_POST['email']) && $this->userExist($_POST['email'])){
+        if (isset($_POST['email'], $_POST['name']) && $this->userExist($_POST['email'], $_POST['name'])){
             if (!$this->is_confirmed($_POST['email'], "email")) {
                 $msg = Message::$userMessages['reset_link_info'];
                 view(

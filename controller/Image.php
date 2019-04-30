@@ -52,8 +52,6 @@ class Image extends ImageModel
         }
     }
 
-
-
     public function deleteImg($param = null)
     {
         if (isset($_POST['delete']) && isset($_POST['path']) && isAuth())
@@ -78,14 +76,18 @@ class Image extends ImageModel
     {
         if ((isset($_POST, $_POST['img']) || isset($_POST['path']) || isset($_POST['get'])) && isAuth() && isset($_SESSION['name']))
         {
+            //var_dump($_POST);
             $data = json_decode(json_encode($_POST), true);
-            if (isset($data['img'])){
+            if (isset($data['img']) && isset($data['item'], $data['posX'], $data['posY'], $data['width'], $data['height'])){
                 $base64 = $data['img'];
+                $item64 = $data['item'];
+
                 Validate::check(['image' => $base64], 'profil.php', ['image' => "Ce format d'image n'est pas supportee."], "USER_WARING");
+                Validate::check(['image' => $item64], 'profil.php', ['image' => "Ce format d'image n'est pas supportee."], "USER_WARING");
+
                 if (!file_exists(dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name']))
-                {
                     mkdir(dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name']);
-                }
+
                 $pos  = strpos($base64, ';');
                 $type = explode('/', explode(':', substr($base64, 0, $pos))[1])[1];
                 if (isset($type)){
@@ -93,7 +95,20 @@ class Image extends ImageModel
                     $path = dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name'].'/'.$random.'.'.$type;
                     $js_path = '/ressources/images/'.$_SESSION['name'].'/'.$random.'.'.$type;
                     $this->storeImg($_SESSION['name'], $js_path);
-                    base64ToImage($base64, $path);
+                    $dst = imagecreatefromstring(extract_base64(trim($base64)));
+
+                    $src = imagecreatefromstring(extract_base64(trim($item64)));
+
+                    //imagepng($src, $path);
+                    imagecopymerge_alpha($dst,
+                    $src, $data['posX'], $data['posY'], 0, 0, $data['width'], $data['height'], 80);
+
+                    imagepng($dst, $path);
+                    //var_dump($dst);
+                    //var_dump($path);
+                    //base64ToImage(base64_decode($item64), $path);
+                    //imagepng($src, $path);
+
                     echo json_encode($js_path);
                 }
             }

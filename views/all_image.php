@@ -36,7 +36,7 @@
                                     <div class="column is-half">
                                         <a class="card-footer-item" id="<?php echo htmlspecialchars($img->id); ?>"
                                             style="width:100%">
-                                            <i class="fas fa-thumbs-up icon-responsive"></i>
+                                            <i class="far fa-thumbs-up icon-responsive" onclick="addLike(this)"></i>
                                         </a>
                                     </div>
                                     <div class="modal">
@@ -91,6 +91,22 @@
 
 const currentUser = '<?php echo json_encode(htmlspecialchars($_SESSION['name'])); ?>';
 const islooged = <?php echo json_encode(htmlspecialchars(isAuth())); ?>;
+
+
+function isLiked(node)
+{
+    xhr.open('POST', '/isliked/'+node.id);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send('user='+currentUser);
+}
+
+function addLike(node)
+{
+    // regarde la class : si fas fa-thumbs-up icon-responsive, alors déja like.
+    // sinon change de class pour fas fa-thumbs-up icon-responsive + envoi une reponse au serveur.
+    // + incremente le nombre de likes.
+}
+
 
 function createTextarea(dst, link)
 {
