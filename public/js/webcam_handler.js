@@ -1,6 +1,4 @@
-var posX, posY;
-
-var currentNode = {};
+var posX = 0, posY = 0, isDown = false, isReadyPicture = false;
 
 function getX(){
     var w = window,
@@ -87,27 +85,19 @@ function createCam(x, is_resize) {
             canvas.getContext('2d').drawImage(video, 0, 0, width, height);
             var data = canvas.toDataURL('image/png');
 
-
-            var canvasStream = canvas.captureStream();
-            video.srcObject = canvasStream;
-            video.play();
-
-            setTimeout(function(){
-                video.srcObject = streamObj;
-                video.play();
-            }, 1000);
-
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             canvas.getContext('2d').drawImage(document.getElementById(currentNode.id), 0, 0, currentNode.offsetWidth, currentNode.offsetHeight);
 
             var item = canvas.toDataURL('image/png');
-            console.log(item);
             do_xml_request('POST', '/profil/img',
             "img="+data+'&'+'item='+item+'&'+'width='+currentNode.offsetWidth+'&height='+currentNode.offsetHeight+'&posX='+posX+'&posY='+posY);
             addItem = true;
+            //isReadyPicture
         }
 
         startbutton.addEventListener('click', function(ev){
+            if (isReadyPicture == false || (posX == 0 || posY == 0))
+                return ;
             if (startbutton.disabled == true)
                 return ;
             if (is_resize == false)

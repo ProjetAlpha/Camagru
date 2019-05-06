@@ -12,7 +12,7 @@
                         <video class="mr-l-5" id="video">
                         </video>
                         <canvas id="canvas" style="display:none!important;"></canvas>
-                        <div class="card mr-t column">
+                        <div class="card mr-t column" id="card-filter">
                                 <header class="card-header">
                                     <p class="card-header-title has-text-centered txt-responsive">
                                         Sélectionner une image
