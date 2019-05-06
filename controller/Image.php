@@ -7,27 +7,24 @@ class Image extends ImageModel
     public function profil($param = null)
     {
         if (isAuth())
-        view('profil.php');
+            view('profil.php');
         else
-        redirect('/');
+            redirect('/');
     }
 
     public function getAllImg($pageNumber = null)
     {
-        // prendre les commentaires + les likes associes avec les images.
-        // triées par date de création...
-        // img id="real_id" ==> avec js on recupere l'id de l'image et on ajoute les commentaires associes.
-        // [1 img] = nav bottom : 1 2 3 4 5 6 ...
         if (isset($pageNumber) && !empty($pageNumber)){
             $countImg = $this->countAllimg();
             if ($pageNumber == 1)
-            $images = $this->getAllUsersImg(1, 5);
+                $images = $this->getAllUsersImg(1, 5);
             else {
                 $images = $this->getAllUsersImg((($pageNumber * 5) - 5) + 1, 5);
             }
             $pagination = calc_pagination($countImg);
+            // ---- get likes counter / images.
             if (isset($images) && isset($images[0]))
-            view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => $pageNumber, 'util' => $this));
+                view('all_image.php', array('images' => $images, 'pagination' => $pagination, 'current' => $pageNumber, 'util' => $this));
             else {
                 view('all_image.php');
             }
@@ -49,6 +46,8 @@ class Image extends ImageModel
         {
             $user_img = $this->getUserImg($_SESSION['name']);
             echo json_encode($user_img);
+        }else {
+            redirect ('/');
         }
     }
 
@@ -69,6 +68,8 @@ class Image extends ImageModel
                     unlink($realpath);
                 }
             }
+        }else {
+            redirect ('/');
         }
     }
 
@@ -76,7 +77,6 @@ class Image extends ImageModel
     {
         if ((isset($_POST, $_POST['img']) || isset($_POST['path']) || isset($_POST['get'])) && isAuth() && isset($_SESSION['name']))
         {
-            //var_dump($_POST);
             $data = json_decode(json_encode($_POST), true);
             if (isset($data['img']) && isset($data['item'], $data['posX'], $data['posY'], $data['width'], $data['height'])){
                 $base64 = $data['img'];
@@ -87,31 +87,24 @@ class Image extends ImageModel
 
                 if (!file_exists(dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name']))
                     mkdir(dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name']);
-
                 $pos  = strpos($base64, ';');
+                //if ()
                 $type = explode('/', explode(':', substr($base64, 0, $pos))[1])[1];
                 if (isset($type)){
                     $random = randomPassword();
-                    $path = dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name'].'/'.$random.'.'.$type;
-                    $js_path = '/ressources/images/'.$_SESSION['name'].'/'.$random.'.'.$type;
+                    $path = dirname(__DIR__).'/public/ressources/images/'.$_SESSION['name'].'/'.$random.'.png';
+                    $js_path = '/ressources/images/'.$_SESSION['name'].'/'.$random.'.png';
                     $this->storeImg($_SESSION['name'], $js_path);
                     $dst = imagecreatefromstring(extract_base64(trim($base64)));
-
                     $src = imagecreatefromstring(extract_base64(trim($item64)));
-
-                    //imagepng($src, $path);
                     imagecopymerge_alpha($dst,
-                    $src, $data['posX'], $data['posY'], 0, 0, $data['width'], $data['height'], 80);
-
+                    $src, $data['posX'], $data['posY'], 0, 0, $data['width'], $data['height'], 100);
                     imagepng($dst, $path);
-                    //var_dump($dst);
-                    //var_dump($path);
-                    //base64ToImage(base64_decode($item64), $path);
-                    //imagepng($src, $path);
-
                     echo json_encode($js_path);
                 }
             }
+        }else {
+            redirect ('/');
         }
     }
 }

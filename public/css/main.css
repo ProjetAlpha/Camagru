@@ -10,6 +10,10 @@
     margin-left:10% !important;
 }
 
+.mr-l-4{
+    margin-left:4% !important;
+}
+
 .mr-l{
   margin-left:3% !important;
 }
@@ -54,9 +58,24 @@
   }
 }
 
-.button{
-
+@media screen and (min-width:1000px){
+    .font-responsive-btn{
+        font-size: 1.1vw!important;
+    }
 }
+
+@media screen and (min-width:1200px){
+    .font-responsive-btn{
+        font-size: 1vw!important;
+    }
+}
+
+@media screen and (min-width:1600px){
+    .font-responsive-btn{
+        font-size: 0.8vw!important;
+    }
+}
+
 
 .icon-reponsive-lg-percent{
     font-size:190%;
@@ -201,6 +220,48 @@ textarea {
   .title.is-3 {
     font-size: 1.9rem;
   }
+}
+
+.input-responsive{
+    width:100%;
+}
+
+@media screen and (min-width: 750px) and (max-width: 1300px) {
+    .responsive-form{
+        width:35%;
+    }
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1600px) {
+    .responsive-form{
+        width:30%;
+    }
+}
+
+@media screen and (min-width: 1600px) and (max-width: 1800px) {
+    .responsive-form{
+        width:25%;
+    }
+}
+
+@media screen and (min-width: 1800px) and (max-width: 2300px) {
+    .responsive-form{
+        width:23%;
+    }
+}
+
+@media screen and (min-width: 2300px) and (max-width: 3400px) {
+    .responsive-form{
+        width:20%;
+    }
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    margin:6%;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 @media screen and (max-width: 980px) {

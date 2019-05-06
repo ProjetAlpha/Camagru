@@ -14,19 +14,18 @@ class Commentary extends Models
         {
             $result = $this->commentary->getCommentary($imageId);
             echo (json_encode($result));
-        }else {
-            echo (json_encode("error"));
         }
     }
 
     public function addComments($imageId = null)
     {
-        if (isset($imageId) && isset($_POST['comment']) && isAuth() && isset($_SESSION['email']))
+        if (isset($imageId) && isset($_POST['comment']) && isAuth() && isset($_SESSION['email'], $_POST['user']))
         {
             $data = json_decode(json_encode($_POST), true);
             $sanitize = filter_var($data['comment'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $result = $this->commentary->storeCommentary($imageId, $_SESSION['email'], $sanitize);
-            if ($this->commentary->getUserImgName($imageId) == $_SESSION['email']) // && $this->getUserSettings($_SESSION['email']))
+            $result = $this->commentary->storeCommentary($imageId, $_SESSION['email'], $sanitize, $_POST['user']);
+            $isNotified = $this->settings->isNotified($_SESSION['email']);
+            if ($this->commentary->getUserImgMail($imageId) == $_SESSION['email'] && $isNotified == true)
             {
                 if (isset($_POST['page']))
                 {

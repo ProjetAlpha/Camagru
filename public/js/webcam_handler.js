@@ -1,4 +1,6 @@
-var posX = 0, posY = 0, isDown = false, isReadyPicture = false;
+var posX = 0, posY = 0, isDown = false, isReadyPicture = false, isImgChanged = false;
+
+var currentNode = {};
 
 function getX(){
     var w = window,
@@ -10,13 +12,31 @@ function getX(){
     return (width);
 }
 
+
+var canvas = document.querySelector('#canvas');
+var imgData, error = false;
+
+var openFile = function(event) {
+    isImgChanged = true;
+    var input = document.getElementById('findImg').files[0];
+    var img = document.getElementById('img-display');
+    var reader = new FileReader();
+    var dataURL;
+    reader.onload = function(e){
+      dataURL = reader.result;
+      img.src = dataURL;
+      img.style.display = 'block';
+    };
+    reader.readAsDataURL(input);
+ };
+
+
 var addItem = false;
 function createCam(x, is_resize) {
 
     var streaming = false,
     video        = document.querySelector('#video'),
     cover        = document.querySelector('#cover'),
-    canvas       = document.querySelector('#canvas'),
     photo        = document.querySelector('#photo'),
     startbutton  = document.querySelector('#startbutton'),
     width = x,
@@ -24,11 +44,13 @@ function createCam(x, is_resize) {
 
     var streamObj;
 
-
     navigator.getMedia = ( navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia);
+
+    if (!navigator.getUserMedia)
+        error = true;
 
         navigator.getMedia(
             {
@@ -47,15 +69,15 @@ function createCam(x, is_resize) {
                 video.play();
             },
             function(err) {
-                console.log("An error occured! " + err);
+                console.log("An error occured with your media! " + err);
+                error = true;
+                //console.
+                video.style.display = 'none';
+                var input = document.getElementById('findImg');
+                input.style.display = 'block';
             }
         );
-        //var stream = canvas.captureStream(25);
-        //video.srcObject = stream;
-        // superposer les images.
-        // qd on drop : var stream = canvas.captureStream();
-        // video.srcObject = stream --- pendant 5 sec, ensuite restream la cam.
-        // sinon : canvas de la taille de la video + ajouter a la position de la souris l'image dans le canvas + afficher le canvas.
+
         video.addEventListener('canplay', function(ev){
             if (!streaming) {
                 height = video.videoHeight / (video.videoWidth/width);
@@ -67,21 +89,30 @@ function createCam(x, is_resize) {
             }
         }, false);
 
-        function stopStreamedVideo(videoElem) {
-            let stream = videoElem.srcObject;
-            let tracks = stream.getTracks();
+        function handleError()
+        {
+            var data = document.getElementById('img-display');
+            canvas.width = data.clientWidth;
+            canvas.height = data.clientHeight;
 
-            tracks.forEach(function(track) {
-                track.stop();
-            });
+            canvas.getContext('2d').fillStyle = "#FFF";
+            canvas.getContext('2d').fillRect(0, 0, canvas.width, canvas.height);
+            canvas.getContext('2d').drawImage(data, 0, 0, canvas.width, canvas.height);
+            var data = canvas.toDataURL('image/png');
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
-            videoElem.srcObject = null;
+            canvas.getContext('2d').drawImage(document.getElementById(currentNode.id), 0, 0, currentNode.offsetWidth, currentNode.offsetHeight);
+            var item = canvas.toDataURL('image/png');
+
+            do_xml_request('POST', '/profil/img',
+            "img="+data+'&'+'item='+item+'&'+'width='+currentNode.offsetWidth+'&height='+currentNode.offsetHeight+'&posX='+posX+'&posY='+posY);
+            addItem = true;
         }
 
         function takepicture() {
             canvas.width = width;
             canvas.height = height;
-            canvas.style.display="none";
+            canvas.style.display = "none";
             canvas.getContext('2d').drawImage(video, 0, 0, width, height);
             var data = canvas.toDataURL('image/png');
 
@@ -92,18 +123,23 @@ function createCam(x, is_resize) {
             do_xml_request('POST', '/profil/img',
             "img="+data+'&'+'item='+item+'&'+'width='+currentNode.offsetWidth+'&height='+currentNode.offsetHeight+'&posX='+posX+'&posY='+posY);
             addItem = true;
-            //isReadyPicture
         }
 
-        startbutton.addEventListener('click', function(ev){
-            if (isReadyPicture == false || (posX == 0 || posY == 0))
+        window.onload =  function () {
+            startbutton.addEventListener('click', function(ev){
+            if ((posX == 0 || posY == 0))
                 return ;
             if (startbutton.disabled == true)
                 return ;
-            if (is_resize == false)
+            if (is_resize == false && error == false)
                 takepicture();
+            if (error == true)
+            {
+                handleError();
+            }
             ev.preventDefault();
         }, false);
+        }
     }
 
     var container = document.getElementById('user-img');
@@ -115,8 +151,10 @@ function createCam(x, is_resize) {
 
     createCam(getX(), false);
     window.onresize = function(){
-        var video        = document.querySelector('#video');
-        video.setAttribute('width', getX());
+        var video = document.querySelector('#video');
+        var size = getX();
+        video.setAttribute('width', size);
+        //canvas.setAttribute('width', size);
     };
 
 var startbutton  = document.querySelector('#startbutton');

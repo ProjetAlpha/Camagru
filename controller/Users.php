@@ -45,22 +45,6 @@ class Users extends UserModel
         }
     }
 
-    public function modif($param = null)
-    {
-        if ($this->is_auth() && isset($_POST)) {
-            if (isset($_POST['name'])) {
-                // modif name.
-            }
-            if (isset($_POST['password'])) {
-                // modif password.
-            }
-            if (isset($_POST['mail']))
-            {
-                // modif mail.
-            }
-        }
-    }
-
     public function resetView($param = null)
     {
         view('reset_password.php', ['reset' => 'mailing', 'type' => "USER_CONFIRMATION"]);
@@ -109,6 +93,7 @@ class Users extends UserModel
         } else {
             view('reset_password.php', ['reset' => 'mailing', 'type' => "USER_CONFIRMATION"]);
         }
+        redirect('/');
     }
 
     public function doConfirm($param = null)
@@ -211,7 +196,8 @@ class Users extends UserModel
         if (isset($_SESSION) && keysExist(['name', 'token'], $_SESSION) && isAuth()) {
             $_SESSION['name'] = "";
             $_SESSION['token'] = "";
-            view("all_image.php");
+            $_SESSION['email'] = "";
+            redirect('/');
         }else {
             redirect('/');
         }

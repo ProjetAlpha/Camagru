@@ -8,7 +8,7 @@ class UserModel
 
     public function __construct()
     {
-        require(ROOT."/database.php");
+        require(ROOT."/config/database.php");
         $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -32,6 +32,15 @@ class UserModel
             $result = $prepare->fetch(PDO::FETCH_ASSOC);
             return (isset($result['email']) && !empty($result['email']));
         }
+    }
+
+    public function userNameExist($name)
+    {
+        $sql = "SELECT name FROM Users WHERE name=?";
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute([$name]);
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+        return (isset($result['name']) && !empty($result['name']));
     }
 
     public function createUser($name, $password, $mail, $confirmationLink)

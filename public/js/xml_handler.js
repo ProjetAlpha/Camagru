@@ -10,7 +10,6 @@ function displayImages(data)
 {
     for(i = 0; i < data.length; i++)
     {
-        //console.log('display');
         addImg(data[i], true);
     }
 }
@@ -31,31 +30,21 @@ function async_request(xhr, method, url, data, type) {
     var container = document.getElementById('user-img');
     var data = [];
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log(xhr.responseText);
-    }
-}
     if (type !== 'delete')
     {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
                 if (IsJsonString(xhr.responseText))
                     var data = JSON.parse(xhr.responseText);
                 if (Array.isArray(data) && data.length > 1)
                 {
                     displayImages(data);
                 }else if (data !== undefined && data !== "" && data.length != 0){
-                    console.log(data);
                     addImg(data);
                 }
             }
         }
     }
-    xhr.onerror = function() {
-        console.log("Request failed");
-    };
 }
 
 function do_xml_request(method, url, data, type = null) {

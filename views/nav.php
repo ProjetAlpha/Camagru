@@ -17,13 +17,12 @@
                 <i class="fas fa-home fa-lg"></i>
             </a>
 
-            <a href="/image" class="navbar-item mr-r">
-                <i class="fas fa-images fa-lg"></i>
-            </a>
-
             <?php if (isset($_SESSION, $_SESSION['token'], $_SESSION['name']) && isAuth()): ?>
                 <a href="/profil" class="navbar-item mr-r">
-                    <i class="fas fa-user fa-lg"></i>
+                    <i class="fas fa-images fa-lg"></i>
+                </a>
+                <a href="/settings" class="navbar-item mr-r">
+                    <i class="fas fa-user-cog"></i>
                 </a>
             <?php endif; ?>
         </div>

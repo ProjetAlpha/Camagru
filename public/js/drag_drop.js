@@ -1,6 +1,3 @@
-var mario = document.getElementById("mario-img");
-var pomme = document.getElementById("pomme-img");
-
 var startX, startY;
 
 var mouseX, mouseY;
@@ -9,7 +6,6 @@ var is_active = false;
 
 var coords = {x:0, y:0};
 
-var currentNode = {};
 
 function isObjectinRect(rect, a, b, c, d)
 {
@@ -17,15 +13,12 @@ function isObjectinRect(rect, a, b, c, d)
     if (!(a >= rect.left && a <= rect.right &&
         b >= rect.top && b <= rect.bottom))
         return (false);
-        if (!(c >= rect.left && c <= rect.right &&
+    if (!(c >= rect.left && c <= rect.right &&
             d >= rect.top && d <= rect.bottom))
-            return (false);
-            return true;
-        }
-
-
-        // si le currentNode revient dans la box du parent, alors possibilite de changer de node.
-        // il y a un seul qui bouger en dehors de la box.
+        return (false);
+    return true;
+}
+        // qd on change d'image, restart le bail.
         function startImg(event, node){
 
             if (currentNode.id !== undefined)
@@ -34,17 +27,27 @@ function isObjectinRect(rect, a, b, c, d)
                 var x = document.getElementById(currentNode.id).getBoundingClientRect().left;
                 var y = document.getElementById(currentNode.id).getBoundingClientRect().top;
 
-                if (x >= filterParent.left && x <= filterParent.right &&
-                    y >= filterParent.top && y <= filterParent.bottom){
+                var isInRect = isObjectinRect(filterParent, x, y, document.getElementById(currentNode.id).getBoundingClientRect().right,
+                document.getElementById(currentNode.id).getBoundingClientRect().bottom);
+                if (isInRect){
                         currentNode = node;
+                        startX = event.clientX;
+                        startY = event.clientY;
                     }
                 }
+                //if (currentNode.id !== node.id)
+
+                // si
                 if (currentNode.id !== undefined && currentNode.id !== node.id)
-                return;
+                    return;
                 if (isDown == false)
                 {
+                    console.log('yes change node');
+                    //console.log(isImgChanged);
+                    // si on change d'image... remet le currentNode dans le cadre. cadre.getBoundingrect().x cadre.getBoundingrect().y;
                     startX = event.clientX;
                     startY = event.clientY;
+                    //isImgChanged = false;
                 }
                 currentNode = node;
                 is_active = true;
@@ -65,6 +68,9 @@ function isObjectinRect(rect, a, b, c, d)
             };
 
             window.onmouseup = function (event){
+                if (!document.getElementById(currentNode.id))
+                    return ;
+
                 mouseX = event.clientX;
                 mouseY = event.clientY;
 
@@ -73,27 +79,30 @@ function isObjectinRect(rect, a, b, c, d)
 
                 event.preventDefault();
                 event.stopPropagation();
-                // on est bien dans le cadre de la video ? si ok, on lache le bail et on envoi les images a superposer au cote serveeur (pos des 2 images stp).
-                // si l'image est bien dans le rect.
+
                 var x = document.getElementById(currentNode.id).getBoundingClientRect().left;
                 var y = document.getElementById(currentNode.id).getBoundingClientRect().top;
-                var divRect = document.getElementById("video").getBoundingClientRect();
 
+                var imgRect = document.getElementById('img-display'), divRect;
+                if (imgRect.style.display == 'block'){
+                    divRect = imgRect.getBoundingClientRect();
+                    console.log('yes');
+                }else {
+                    divRect = document.getElementById("video").getBoundingClientRect();
+                }
                 var isInRect = isObjectinRect(divRect, x, y, document.getElementById(currentNode.id).getBoundingClientRect().right,
                 document.getElementById(currentNode.id).getBoundingClientRect().bottom);
+                var startbutton = document.querySelector('#startbutton');
                 if (isInRect && mouseX >= divRect.left && mouseX <= divRect.right
                     && mouseY >= divRect.top && mouseY <= divRect.bottom){
-                        var startbutton = document.querySelector('#startbutton');
-                        var video = document.querySelector('#video').getBoundingClientRect();
-
-                        posX = x - video.left;
-                        posY = y - video.top;
+                        posX = x - divRect.left;
+                        posY = y - divRect.top;
                         startbutton.disabled = false;
                         currentNode.style.transform = 'translate('+dx+'px'+','+dy+'px'+')';
                         isReadyPicture = true;
                     }
                     if (!isInRect)
-                        isReadyPicture = false;
+                        startbutton.disabled = true;
                         is_active = false;
                         isDown = true;
                     };

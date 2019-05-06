@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/database.php');
+require_once(__DIR__.'/config/database.php');
 
 if (!function_exists('randomPassword')) {
     function randomPassword()
@@ -139,7 +139,7 @@ if (!function_exists('isAuth')) {
 if (!function_exists('checkBase64Format')){
     function checkBase64Format($value) {
         $explode = explode(',', $image);
-        $allow = ['png', 'jpg', 'svg'];
+        $allow = ['png', 'jpg', 'jpeg'];
         $format = str_replace(
             [
                 'data:image/',
