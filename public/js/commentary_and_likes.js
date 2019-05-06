@@ -220,7 +220,6 @@ if (Array.isArray(matchGoTo) && matchGoTo.length > 0)
     }
 }
 
-
 function addCommentary(btn)
 {
     if (islooged == 0)

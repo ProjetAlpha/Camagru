@@ -4,10 +4,10 @@
             <?php if (isset($pagination) && $pagination > 0): ?>
                 <?php for ($i = 1; $i <= $pagination; $i++): ?>
                     <?php if (isset($current) && $current == $i): ?>
-                        <li class="is-small-mobile"><a class="pagination-link is-current" aria-label="Goto page <?php echo htmlspecialchars($i); ?>"
+                        <li class="is-small-mobile"><a class="pagination-link is-current" style="color:white;" aria-label="Goto page <?php echo htmlspecialchars($i); ?>"
                             href="/page/<?php echo htmlspecialchars($i); ?>" aria-current="page"><?php echo htmlspecialchars($i); ?></a></li>
                         <?php else: ?>
-                            <li class="is-small-mobile"><a class="pagination-link" aria-label="Goto page <?php echo htmlspecialchars($i); ?>" href="/page/<?php echo htmlspecialchars($i); ?>">
+                            <li class="is-small-mobile"><a class="pagination-link" style="color:black;" aria-label="Goto page <?php echo htmlspecialchars($i); ?>" href="/page/<?php echo htmlspecialchars($i); ?>">
                                 <?php echo htmlspecialchars($i); ?></a></li>
                             <?php endif; ?>
                         <?php endfor; ?>

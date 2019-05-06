@@ -18,7 +18,7 @@ function isObjectinRect(rect, a, b, c, d)
         return (false);
     return true;
 }
-        // qd on change d'image, restart le bail.
+        // TODO: qd on change d'image, restart le bail.
         function startImg(event, node){
 
             if (currentNode.id !== undefined)
@@ -35,19 +35,12 @@ function isObjectinRect(rect, a, b, c, d)
                         startY = event.clientY;
                     }
                 }
-                //if (currentNode.id !== node.id)
-
-                // si
                 if (currentNode.id !== undefined && currentNode.id !== node.id)
                     return;
                 if (isDown == false)
                 {
-                    console.log('yes change node');
-                    //console.log(isImgChanged);
-                    // si on change d'image... remet le currentNode dans le cadre. cadre.getBoundingrect().x cadre.getBoundingrect().y;
                     startX = event.clientX;
                     startY = event.clientY;
-                    //isImgChanged = false;
                 }
                 currentNode = node;
                 is_active = true;
@@ -86,7 +79,6 @@ function isObjectinRect(rect, a, b, c, d)
                 var imgRect = document.getElementById('img-display'), divRect;
                 if (imgRect.style.display == 'block'){
                     divRect = imgRect.getBoundingClientRect();
-                    console.log('yes');
                 }else {
                     divRect = document.getElementById("video").getBoundingClientRect();
                 }
