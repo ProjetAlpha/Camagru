@@ -9,7 +9,8 @@ class Message
         'confirm_login_info' => "Veuillez confirmer votre inscription en cliquant sur le lien envoyé dans votre boîte mail",
         'reset_login_info' => "Veuillez confirmer le changement du mot de passe en cliquant sur le lien envoyé dans votre boîte mail.",
         'name' => "Le nom doit uniquement contenir des caractéres alphanumériques",
-        'mail' => "Ce mail n'est pas valid."
+        'mail' => "Ce mail n'est pas valid.",
+        'reset_email' => "Votre mail a été modifié."
     ];
 }
 

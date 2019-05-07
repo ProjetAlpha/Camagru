@@ -51,6 +51,38 @@ class SettingsModel
             return (false);
         }
     }
+
+    public function updateEmail($email, $newEmail)
+    {
+        $sql = "UPDATE Likes SET Likes.user_email = :new_mail WHERE Likes.user_email = :current_mail";
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":new_mail", $newEmail);
+        $prepare->bindValue(":current_mail", $email);
+        $prepare->execute();
+
+        $sql = "UPDATE Commentary SET Commentary.user_email = :new_mail WHERE Commentary.user_email = :current_mail";
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":new_mail", $newEmail);
+        $prepare->bindValue(":current_mail", $email);
+        $prepare->execute();
+    }
+
+    public function updateName($name, $newName)
+    {
+        $sql = "UPDATE Gallery SET Gallery.user_name = :new_name, Gallery.img_path = REPLACE(Gallery.img_path, SUBSTRING_INDEX(SUBSTRING_INDEX(Gallery.img_path, '/', -2), '/', 1), :new_name) WHERE Gallery.user_name = :current_name";
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":new_name", $newName);
+        $prepare->bindValue(":current_name", $name);
+        $prepare->execute();
+
+        rename(dirname(__DIR__).'/public/ressources/images/'.$name, dirname(__DIR__).'/public/ressources/images/'.$newName);
+
+        $sql = "UPDATE Commentary SET Commentary.user_name = :new_name WHERE Commentary.user_name = :current_name";
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":new_name", $newName);
+        $prepare->bindValue(":current_name", $name);
+        $prepare->execute();
+    }
 }
 
 ?>

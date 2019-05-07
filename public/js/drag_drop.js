@@ -6,6 +6,9 @@ var is_active = false;
 
 var coords = {x:0, y:0};
 
+var allImg = [].slice.call(document.querySelectorAll('[id^=img-]'));
+//console.log(allImg);
+
 
 function isObjectinRect(rect, a, b, c, d)
 {
@@ -18,9 +21,10 @@ function isObjectinRect(rect, a, b, c, d)
         return (false);
     return true;
 }
-        // TODO: qd on change d'image, restart le bail.
+        // TODO: qd on change d'image, restart la position du current node a cote de id + 1.
+        // var index = parseInt(currentNode.id); var nextTo = allImg[index + 1];
+        // placer le current node a cote de nextto (rect) et prev (rect). => 4 pnts + margin X percent.
         function startImg(event, node){
-
             if (currentNode.id !== undefined)
             {
                 var filterParent = document.querySelector('#card-filter').getBoundingClientRect();

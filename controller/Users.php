@@ -80,7 +80,7 @@ class Users extends UserModel
             );
         }
         if (isset($_POST['new_password']) && isset($_SESSION['email'])
-        && $this->isValidReset($_SESSION['email']) && !$this->is_auth())
+        && $this->isValidReset($_SESSION['email']) && !isAuth())
         {
             Validate::check([
                 'password' => $_POST['new_password'],

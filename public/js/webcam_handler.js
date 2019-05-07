@@ -16,6 +16,13 @@ function getX(){
 var canvas = document.querySelector('#canvas');
 var imgData, error = false;
 
+function isValidImg(file)
+{
+    const fileType = file["type"];
+    const validImageTypes = ["image/jpeg", "image/png", "image/jpg"];
+    return (validImageTypes.includes(fileType));
+}
+
 var openFile = function(event) {
     isImgChanged = true;
     var input = document.getElementById('findImg').files[0];
@@ -23,12 +30,17 @@ var openFile = function(event) {
     var reader = new FileReader();
     var dataURL;
     reader.onload = function(e){
-      dataURL = reader.result;
-      img.src = dataURL;
-      img.style.display = 'block';
+        dataURL = reader.result;
+        if (!isValidImg(input))
+            img.src = "error";
+        else {
+            img.src = dataURL;
+            img.style.display = 'block';
+        }
     };
-    reader.readAsDataURL(input);
- };
+    if (img.src !== "error")
+        reader.readAsDataURL(input);
+};
 
 
 var addItem = false;
@@ -49,7 +61,7 @@ function createCam(x, is_resize) {
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia);
 
-    if (!navigator.getUserMedia)
+        if (!navigator.getUserMedia)
         error = true;
 
         navigator.getMedia(
@@ -69,9 +81,7 @@ function createCam(x, is_resize) {
                 video.play();
             },
             function(err) {
-                console.log("An error occured with your media! " + err);
                 error = true;
-                //console.
                 video.style.display = 'none';
                 var input = document.getElementById('findImg');
                 input.style.display = 'block';
@@ -92,6 +102,9 @@ function createCam(x, is_resize) {
         function handleError()
         {
             var data = document.getElementById('img-display');
+
+            if (data.src == "error")
+                return ;
             canvas.width = data.clientWidth;
             canvas.height = data.clientHeight;
 
@@ -127,18 +140,18 @@ function createCam(x, is_resize) {
 
         window.onload =  function () {
             startbutton.addEventListener('click', function(ev){
-            if ((posX == 0 || posY == 0))
+                if ((posX == 0 || posY == 0))
                 return ;
-            if (startbutton.disabled == true)
+                if (startbutton.disabled == true)
                 return ;
-            if (is_resize == false && error == false)
+                if (is_resize == false && error == false)
                 takepicture();
-            if (error == true)
-            {
-                handleError();
-            }
-            ev.preventDefault();
-        }, false);
+                if (error == true)
+                {
+                    handleError();
+                }
+                ev.preventDefault();
+            }, false);
         }
     }
 
@@ -157,7 +170,7 @@ function createCam(x, is_resize) {
         //canvas.setAttribute('width', size);
     };
 
-var startbutton  = document.querySelector('#startbutton');
-startbutton.disabled = true;
+    var startbutton  = document.querySelector('#startbutton');
+    startbutton.disabled = true;
 
-do_xml_request('POST', '/profil/img/display', "get=1");
+    do_xml_request('POST', '/profil/img/display', "get=1");

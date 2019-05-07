@@ -18,6 +18,15 @@ class ImageModel{
         $this->db->prepare($sql)->execute(['user_name' => $name, 'img_path' => $path]);
     }
 
+    public function getUserImgId($name, $path)
+    {
+        $sql = "SELECT id,img_path, user_name FROM Gallery WHERE img_path = ? AND user_name = ?";
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute([$path, $name]);
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+        return ($result['id']);
+    }
+
     public function getAllUsersImg($from, $max)
     {
         $sql = "SELECT img_path,current_t,id FROM Gallery ORDER BY current_t DESC LIMIT :src,:max";
@@ -49,18 +58,24 @@ class ImageModel{
 
     public function getUserImg($name)
     {
-        $sql = "SELECT img_path FROM Gallery WHERE user_name=?";
+        $sql = "SELECT img_path,id FROM Gallery WHERE user_name=?";
         $prepare = $this->db->prepare($sql);
         $prepare->execute([$name]);
-        $result = $prepare->fetchAll(PDO::FETCH_COLUMN);
+        $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
         return ($result);
     }
 
-    public function deleteUserImg($name, $path)
+    public function deleteUserImg($name, $path, $imgId)
     {
         $sql = "DELETE FROM Gallery WHERE user_name=? AND img_path=?";
         $prepare = $this->db->prepare($sql);
         $prepare->execute([$name, $path]);
+
+        $sql = "DELETE FROM Commentary WHERE img_id=?";
+        $this->db->prepare($sql)->execute([$imgId]);
+
+        $sql = "DELETE FROM Likes WHERE img_id=?";
+        $this->db->prepare($sql)->execute([$imgId]);
     }
 
     public function setLikesCounter($type, $imgId)

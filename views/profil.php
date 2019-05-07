@@ -29,22 +29,22 @@
                                         </div>
                                         <div class="column is-one-fifth">
                                             <figure class="image" style="z-index:999!important;">
-                                                <img src="/ressources/images/custom/heart.png" id="heart-img" onmousedown="startImg(event, this)"/>
+                                                <img src="/ressources/images/custom/heart.png" id="img-1" onmousedown="startImg(event, this)"/>
                                             </figure>
                                         </div>
                                         <div class="column is-one-fifth">
                                             <figure class="image" style="z-index:999!important;">
-                                                <img src="/ressources/images/custom/poop.png" id="poop-img" onmousedown="startImg(event, this)"/>
+                                                <img src="/ressources/images/custom/poop.png" id="img-2" onmousedown="startImg(event, this)"/>
                                             </figure>
                                         </div>
                                         <div class="column is-one-fifth">
                                             <figure class="image" style="z-index:999!important;">
-                                                <img src="/ressources/images/custom/champ_png.png" id="champ-img" onmousedown="startImg(event, this)"/>
+                                                <img src="/ressources/images/custom/champ_png.png" id="img-3" onmousedown="startImg(event, this)"/>
                                             </figure>
                                         </div>
                                         <div class="column is-one-fifth">
                                             <figure class="image" style="z-index:999!important;">
-                                                <img src="/ressources/images/custom/star2.png" id="start-img" onmousedown="startImg(event, this)"/>
+                                                <img src="/ressources/images/custom/star2.png" id="img-4" onmousedown="startImg(event, this)"/>
                                             </figure>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                         </div>
                         <!-- Ajouter une image si pas de webcam -->
                         <div class="column is-one-quarter mr-t mr-l">
-                            <input id="findImg" type='file' accept='image/*' onchange='openFile(event)' style="display:none;"><br>
+                            <input id="findImg" type='file' accept='image/*' onchange='openFile(event)' style="display:none;" data-type='image'><br>
                             <button class="button is-primary is-small-mobile" id="addImg" style="display:none;">Ajouter une image</button>
                         </div>
                     </div>

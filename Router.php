@@ -17,6 +17,7 @@ $route->add('/reset/send', 'post', 'Users@reset');
 
 $route->add('/confirm/:alphanum', 'get', 'Users@confirm');
 $route->add('/reset/:alphanum', 'get', 'Users@resetLink');
+$route->add('/resetEmail/:alphanum', 'get', 'Settings@confirmReset');
 
 $route->add('/profil', 'get', 'Image@profil');
 $route->add('/profil/img', 'post', 'Image@loadImg');

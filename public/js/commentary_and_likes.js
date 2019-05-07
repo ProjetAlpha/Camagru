@@ -7,7 +7,7 @@ function isLiked(node)
 
 function addLike(node)
 {
-    if (parseInt(islooged) == 0)
+    if (islooged == 0)
         return ;
     if (node.children[0].className.split(' ')[0] == 'fas')
     {
@@ -162,6 +162,36 @@ document.onkeydown = function(evt) {
     }
 };
 
+function needLoggedUser(dst)
+{
+    var  col = document.createElement('div');
+
+    var registerLink = document.createElement('a');
+    var logLink = document.createElement('a');
+
+    var registerBtn = document.createElement('button');
+    var logBtn = document.createElement('button');
+
+    col.className = 'columns is-vcentered is-mobile mr-t';
+    registerBtn.className = 'button is-primary is-small is-small-mobile';
+    registerBtn.innerHTML = 'Inscription';
+    logBtn.className = 'button is-primary is-small is-small-mobile';
+    logBtn.innerHTML = 'Connexion';
+    registerLink.className = 'mr-l-5';
+    logLink.className = 'mr-l';
+
+    registerLink.href = '/register';
+    logLink.href = '/login';
+
+    registerLink.appendChild(registerBtn);
+    logLink.appendChild(logBtn);
+
+    col.appendChild(registerLink);
+    col.appendChild(logLink);
+
+    dst.appendChild(col);
+}
+
 function getComments(link)
 {
     var xhr = new XMLHttpRequest();
@@ -181,9 +211,11 @@ function getComments(link)
                 createImg(link);
                 getAllComments(data, link);
                 var dstBody = link.parentElement.parentElement.children[2].children[1].children[1];
-                if (parseInt(islooged) !== 0)
+                if (islooged == 1)
                 {
                     createTextarea(dstBody, link);
+                }else {
+                    needLoggedUser(dstBody);
                 }
             }else {
                 var parent = link.parentElement.parentElement.children[2];
@@ -191,9 +223,11 @@ function getComments(link)
                 current_node = parent;
                 createImg(link);
                 var dstBody = link.parentElement.parentElement.children[2].children[1].children[1];
-                if (parseInt(islooged) !== 0)
+                if (islooged == 1)
                 {
                     createTextarea(dstBody, link);
+                }else {
+                    needLoggedUser(dstBody);
                 }
             }
         }

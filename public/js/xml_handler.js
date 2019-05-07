@@ -1,6 +1,7 @@
-function img_create(src, alt, title) {
+function img_create(src, id, alt, title) {
     var img = document.createElement('img');
     img.src = src;
+    img.id = id;
     if ( alt != null ) img.alt = alt;
     if ( title != null ) img.title = title;
     return img;
@@ -10,7 +11,7 @@ function displayImages(data)
 {
     for(i = 0; i < data.length; i++)
     {
-        addImg(data[i], true);
+        addImg(data[i].img_path, data[i].id, true);
     }
 }
 
@@ -40,7 +41,7 @@ function async_request(xhr, method, url, data, type) {
                 {
                     displayImages(data);
                 }else if (data !== undefined && data !== "" && data.length != 0){
-                    addImg(data);
+                    addImg(data[0].img_path, data[0].id);
                 }
             }
         }
@@ -53,12 +54,11 @@ function do_xml_request(method, url, data, type = null) {
     async_request(xhr, method, url, data, type);
 }
 
-function addImg(img, isAll = false)
+function addImg(src, id, isAll = false)
 {
     var container = document.getElementById('user-img');
-    var lastIndex = Array.isArray(img) ? img.length - 1 : -1;
-    var currentImg = (isAll == false && Array.isArray(img) && lastIndex !== -1) ?
-    img_create(img[lastIndex],  "user-img") : img_create(img, "user-img");
+    var currentImg = img_create(src, id, "user-img");
+
     var figure = document.createElement('figure');
     var mainDiv = document.createElement('div');
 
@@ -68,33 +68,25 @@ function addImg(img, isAll = false)
     var cardBtn = document.createElement('div');
     cardBtn.style.padding = '2%';
 
-    //var deleteBtn = document.createElement('a');
     var icon = document.createElement('span');
     var iconElement = document.createElement('i');
     var text = document.createElement('span');
 
     iconElement.className = 'fas fa-times-circle fa-lg icon-responsive2 icon-reponsive-lg-percent';
-    //iconElement.style.color = '#212529';
     icon.className = 'tag is-info is-small-mobile';
     icon.style.float = 'right';
     icon.style.cursor = 'pointer';
     icon.appendChild(iconElement);
 
-    //text.innerHTML = 'Supprimer';
     text.className = 'reponsive-text-1';
-    //deleteBtn.className = 'button is-danger is-small-mobile';
-    //
-    // /ressources/images/tho/opCngxceiOYNNk2AmkgVmN4XKrkxVNtD.png
     icon.addEventListener('click', function(event){
         var parent = this.parentElement.parentElement;
-        var path = parent.children[0].children[0].children[0].src;
-        var urlPath = new URL(path).pathname;
-        do_xml_request('POST', '/profil/img/delete', 'delete=1&path='+urlPath, 'delete');
+        var img = parent.children[0].children[0].children[0];
+        var urlPath = new URL(img.src).pathname;
+        do_xml_request('POST', '/profil/img/delete', 'delete=1&path='+urlPath+'&img_id='+img.id, 'delete');
         event.preventDefault();
         parent.parentElement.removeChild(parent);
     }, false);
-    //deleteBtn.appendChild(text);
-    //deleteBtn.appendChild(icon);
 
     card.className = 'card mr-b';
     cardContent.className = 'card-image';

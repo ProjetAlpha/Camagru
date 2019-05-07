@@ -83,7 +83,7 @@
 <script>
 
 const currentUser = <?php echo json_encode(htmlspecialchars($_SESSION['name'])); ?>;
-const islooged = <?php echo json_encode(htmlspecialchars(isAuth())); ?>;
+const islooged = parseInt(<?php echo json_encode(htmlspecialchars(isAuth())); ?>);
 
 </script>
 

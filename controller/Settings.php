@@ -34,6 +34,7 @@ class Settings extends Models
                 );
             }
             $this->settings->changeUserName($_SESSION['email'], $_POST['newname']);
+            $this->settings->updateName($_SESSION['name'], $_POST['newname']);
             $_SESSION['name'] = $_POST['newname'];
             redirect ('/settings');
         }else {
@@ -87,11 +88,19 @@ class Settings extends Models
                     array("warning" => "Ce mail existe déjà.", "type" => "USER_WARNING_EMAIL")
                 );
             }
-            $this->settings->changeEmail($_SESSION['email'], $_POST['newemail']);
-            $_SESSION['name'] = "";
-            $_SESSION['token'] = "";
-            $_SESSION['email'] = "";
-            redirect ('/login');
+            $link = randomPassword();
+            sendHtmlMail(
+                $_SESSION['email'],
+                "<a href=http://localhost:".$_SERVER['SERVER_PORT'].'/resetEmail/'.$link.">
+                Confirmer la réinitialisation du mail </a>",
+                "Réinitialisation du mail"
+            );
+            $_SESSION['resetEmailHash'] = password_hash($link, PASSWORD_DEFAULT);
+            $_SESSION['newmail'] = $_POST['newemail'];
+            view(
+                "settings.php",
+                array("warning" => "Un mail de confirmation a été envoyé.", "type" => "USER_WARNING_EMAIL")
+            );
         }else {
             redirect ('/');
         }
@@ -124,6 +133,28 @@ class Settings extends Models
             }
         }else {
             redirect('/');
+        }
+    }
+
+    public function confirmReset($link = null)
+    {
+        if (isset($link, $_SESSION['resetEmailHash'], $_SESSION['newmail'])
+        && isAuth() && password_verify($link, $_SESSION['resetEmailHash'])){
+            $msg = Message::$userMessages['reset_email'];
+            $this->settings->changeEmail($_SESSION['email'], $_SESSION['newmail']);
+            $this->settings->updateEmail($_SESSION['email'], $_SESSION['newmail']);
+            $_SESSION['email'] = $_SESSION['newmail'];
+            $_SESSION['newmail'] = "";
+            $_SESSION['resetEmailHash'] = "";
+            view(
+                'login_page.php',
+                array("confirmation" =>
+                $msg,
+                "type" => "USER_CONFIRMATION")
+            );
+            redirect ('/settings');
+        }else {
+            redirect ('/');
         }
     }
 }

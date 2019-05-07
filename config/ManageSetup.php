@@ -1,7 +1,7 @@
 <?php
 
 include_once(__DIR__."/database.php");
-include_once(__DIR__."/utils.php");
+include_once(dirname(__DIR__)."/utils.php");
 
 class Setup
 {
